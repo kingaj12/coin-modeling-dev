@@ -1,0 +1,68 @@
+{
+  "StochasticInventory": {
+    "type": "model",
+    "style": "stochastic multi-period",
+    "containers": ["INVENTORY"],
+    "random": ["D"],
+    "input": {
+
+    },
+    "output": {
+
+    }
+  },
+  "INVENTORY": {
+    "type": "container",
+    "imports": [
+      "Balance0",
+      "Demand"
+    ],
+    "exports": [
+      "Balance",
+      "StockOrder",
+      "OrderFulfilled"
+    ],
+    "definition": {
+      "P": {
+        "type": "set",
+        "ordered": false
+      },
+      "T": {
+        "type": "set",
+        "ordered": true,
+        "starts": 0
+      },
+      "X": {
+        "type": "data",
+        "index": [
+          "P",
+          "T"
+        ]
+      },
+      "Balance": {
+        "type": "data",
+        "index": [
+          "P",
+          "T"
+        ],
+        "definition": {
+          "T>0": "Balance[T,P] = Balance[T-1,P] + X[T,P] - D[T,P]",
+          "T==0": "Balance[0,P] = Balance0[P]"
+        }
+      },
+      "Balance0": {
+        "type": "data",
+        "index": [
+          "P"
+        ]
+      },
+      "Demand": {
+        "type": "data",
+        "index": [
+          "T",
+          "P"
+        ]
+      }
+    }
+  }
+}
